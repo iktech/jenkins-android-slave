@@ -1,4 +1,4 @@
-FROM docker-slave-image:latest
+FROM eu.gcr.io/track-my-trip-1314/jenkins-slave:latest
 
 RUN cd /opt
 
