@@ -19,39 +19,41 @@ RUN unzip sdk-tools-linux-3859397.zip -d /opt/android-sdk-linux
 RUN rm -rf sdk-tools-linux-3859397.zip
 
 ENV ANDROID_HOME /opt/android-sdk-linux
-
+ENV ANDROID_NDK_HOME ''
 ENV PATH ${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/platform-tools/bin
 
 RUN sdkmanager "platform-tools" | grep done
 
 # SDKs
 # Please keep these in descending order!
-RUN sdkmanager "platforms;android-26" | grep done
-RUN sdkmanager "platforms;android-25" | grep done
-RUN sdkmanager "platforms;android-24" | grep done
-RUN sdkmanager "platforms;android-23" | grep done
-RUN sdkmanager "platforms;android-18" | grep done
-RUN sdkmanager "platforms;android-16" | grep done
-RUN sdkmanager "platforms;android-14" | grep done
+RUN sdkmanager "platforms;android-26"
+RUN sdkmanager "platforms;android-25"
+RUN sdkmanager "platforms;android-24"
+RUN sdkmanager "platforms;android-23"
+RUN sdkmanager "platforms;android-18"
+RUN sdkmanager "platforms;android-16"
+RUN sdkmanager "platforms;android-14"
 
 # build tools
 # Please keep these in descending order!
-RUN sdkmanager "build-tools;26.0.2" | grep done
-RUN sdkmanager "build-tools;26.0.1" | grep done
-RUN sdkmanager "build-tools;26.0.0" | grep done
-RUN sdkmanager "build-tools;25.0.3" | grep done
-RUN sdkmanager "build-tools;25.0.2" | grep done
-RUN sdkmanager "build-tools;25.0.1" | grep done
-RUN sdkmanager "build-tools;25.0.0" | grep done
-RUN sdkmanager "build-tools;24.0.3" | grep done
-RUN sdkmanager "build-tools;24.0.2" | grep done
-RUN sdkmanager "build-tools;24.0.1" | grep done
-RUN sdkmanager "build-tools;24.0.0" | grep done
-RUN sdkmanager "build-tools;23.0.3" | grep done
-RUN sdkmanager "build-tools;23.0.2" | grep done
-RUN sdkmanager "build-tools;23.0.1" | grep done
+RUN sdkmanager "build-tools;26.0.2"
+RUN sdkmanager "build-tools;26.0.1"
+RUN sdkmanager "build-tools;26.0.0"
+RUN sdkmanager "build-tools;25.0.3"
+RUN sdkmanager "build-tools;25.0.2"
+RUN sdkmanager "build-tools;25.0.1"
+RUN sdkmanager "build-tools;25.0.0"
+RUN sdkmanager "build-tools;24.0.3"
+RUN sdkmanager "build-tools;24.0.2"
+RUN sdkmanager "build-tools;24.0.1"
+RUN sdkmanager "build-tools;24.0.0"
+RUN sdkmanager "build-tools;23.0.3"
+RUN sdkmanager "build-tools;23.0.2"
+RUN sdkmanager "build-tools;23.0.1"
 
 RUN sdkmanager --list
+
+RUN sdkmanager "system-images;android-25;google_apis;x86_64"
 
 # Update SDK
 # This is very important. Without this, your builds wouldn't run. Your image would aways get this error:
@@ -81,4 +83,3 @@ COPY gradle.properties /root/.gradle/
 
 
 VOLUME ["/opt/android-sdk-linux"]
-
