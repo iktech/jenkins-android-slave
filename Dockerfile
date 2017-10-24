@@ -75,8 +75,6 @@ RUN sdkmanager "build-tools;23.0.3"
 RUN sdkmanager "build-tools;23.0.2"
 RUN sdkmanager "build-tools;23.0.1"
 
-RUN sdkmanager "system-images;android-25;google_apis;x86_64"
-
 RUN sdkmanager --list
 
 RUN apt-get clean
