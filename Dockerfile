@@ -1,4 +1,5 @@
-FROM eu.gcr.io/track-my-trip-1314/jenkins-slave:latest
+FROM ubuntu
+LABEL maintainer="Igor Kolomiyets <igor.kolomiyets@iktech.io>"
 
 RUN cd /opt
 
@@ -12,11 +13,15 @@ RUN apt-get update -qq \
   && apt-get install -y unzip \
   && rm -rf /var/lib/apt/lists/*
 
+RUN groupadd -g 10000 jenkins
+RUN useradd -d /home/jenkins -m -u 10000 -g jenkins jenkins
+
 RUN wget https://dl.google.com/android/repository/sdk-tools-linux-3859397.zip
 
 RUN unzip sdk-tools-linux-3859397.zip -d /opt/android-sdk-linux
 
 RUN rm -rf sdk-tools-linux-3859397.zip
+
 
 ENV ANDROID_HOME /opt/android-sdk-linux
 ENV ANDROID_NDK_HOME ''
@@ -40,45 +45,46 @@ RUN echo "d975f751698a77b662f1254ddbeed3901e976f5a" > "$ANDROID_HOME/licenses/in
 
 # Create some files, required for the builds
 RUN mkdir -p /root/.android
-RUN mkdir -p /root/.gradle
-COPY release.keystore /root/.android/
 COPY repositories.cfg /root/.android/
-COPY gradle.properties /root/.gradle/
 
 # Install the necessary packages
 RUN sdkmanager "platform-tools" | grep done
 
 # SDKs
 # Please keep these in descending order!
-RUN sdkmanager "platforms;android-26"
-RUN sdkmanager "platforms;android-25"
-RUN sdkmanager "platforms;android-24"
-RUN sdkmanager "platforms;android-23"
-RUN sdkmanager "platforms;android-18"
-RUN sdkmanager "platforms;android-16"
-RUN sdkmanager "platforms;android-14"
+RUN sdkmanager "platforms;android-27"
+#RUN sdkmanager "platforms;android-26"
+#RUN sdkmanager "platforms;android-25"
+#RUN sdkmanager "platforms;android-24"
+#RUN sdkmanager "platforms;android-23"
+#RUN sdkmanager "platforms;android-18"
+#RUN sdkmanager "platforms;android-16"
+#RUN sdkmanager "platforms;android-14"
 
 # build tools
 # Please keep these in descending order!
-RUN sdkmanager "build-tools;26.0.2"
-RUN sdkmanager "build-tools;26.0.1"
-RUN sdkmanager "build-tools;26.0.0"
-RUN sdkmanager "build-tools;25.0.3"
-RUN sdkmanager "build-tools;25.0.2"
-RUN sdkmanager "build-tools;25.0.1"
-RUN sdkmanager "build-tools;25.0.0"
-RUN sdkmanager "build-tools;24.0.3"
-RUN sdkmanager "build-tools;24.0.2"
-RUN sdkmanager "build-tools;24.0.1"
-RUN sdkmanager "build-tools;24.0.0"
-RUN sdkmanager "build-tools;23.0.3"
-RUN sdkmanager "build-tools;23.0.2"
-RUN sdkmanager "build-tools;23.0.1"
+RUN sdkmanager "build-tools;27.0.3"
+#RUN sdkmanager "build-tools;27.0.2"
+#RUN sdkmanager "build-tools;27.0.1"
+#RUN sdkmanager "build-tools;26.0.2"
+#RUN sdkmanager "build-tools;26.0.1"
+#RUN sdkmanager "build-tools;26.0.0"
+#RUN sdkmanager "build-tools;25.0.3"
+#RUN sdkmanager "build-tools;25.0.2"
+#RUN sdkmanager "build-tools;25.0.1"
+#RUN sdkmanager "build-tools;25.0.0"
+#RUN sdkmanager "build-tools;24.0.3"
+#RUN sdkmanager "build-tools;24.0.2"
+#RUN sdkmanager "build-tools;24.0.1"
+#RUN sdkmanager "build-tools;24.0.0"
+#RUN sdkmanager "build-tools;23.0.3"
+#RUN sdkmanager "build-tools;23.0.2"
+#RUN sdkmanager "build-tools;23.0.1"
 
 RUN sdkmanager --list
 
 RUN apt-get clean
 
-RUN chown -R 1000:1000 $ANDROID_HOME
+RUN chown -R 10000:10000 $ANDROID_HOME
 
-VOLUME ["/opt/android-sdk-linux"]
+USER 10000
